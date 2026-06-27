@@ -1,0 +1,160 @@
+# kristal-helix-config
+
+[![license](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue)](LICENSE-APACHE) <img src="https://img.shields.io/github/repo-size/Bli-AIk/kristal-helix-config.svg"/> <img src="https://img.shields.io/github/last-commit/Bli-AIk/kristal-helix-config.svg"/> <br>
+<img src="https://img.shields.io/badge/Helix-281733?style=for-the-badge" /> <img src="https://img.shields.io/badge/LuaLS-2C6DB2?style=for-the-badge" /> <img src="https://img.shields.io/badge/Kristal-3B3B3B?style=for-the-badge" />
+
+> **Note:** This config and its documentation were produced through vibe coding, but have been manually reviewed.
+>
+> Current Status: usable for local Kristal mod development; small and intentionally personal.
+
+| English | 简体中文 |
+|---------|------|
+| English | [简体中文](./README_zh-hans.md) |
+
+**kristal-helix-config** is a project-local [Helix](https://helix-editor.com) editor configuration for Kristal mod projects.
+
+If you enjoy working in the terminal, prefer keyboard-driven workflows, and find that VS Code feels a little heavy, this config might feel right at home. It bundles the essentials for Kristal mod development into a single `.helix` directory — keybindings, Lua completions, and a one-key launch script.
+
+Helix automatically loads `.helix/config.toml` and `.helix/languages.toml` from your project root as local overrides, so you just need this directory to sit at `<your-mod>/.helix/`. The repo is structured to be directly usable as that `.helix` directory.
+
+Currently only tested on Linux. If you're on macOS or using a Windows terminal, you may run into surprises. Feedback is welcome, but cross-platform guarantees aren't there yet.
+
+## Introduction
+
+Kristal mods typically touch Lua scripts, the Love2D API, the Kristal engine, and their own `mod.json`. This config ties together the everyday bits:
+
+* Project-level Helix keybindings.
+* Lua Language Server configuration with Kristal/Love2D completions and diagnostics.
+* A terminal script that launches Kristal from the current mod automatically.
+* A small set of Kristal mod global type hints.
+
+## Features
+
+* `Space-l` — run the current mod in a new terminal.
+* `Space-L` — same, but keep the terminal open after Love exits.
+* `Space-f` — format the current file.
+* `Space-o` / `Space-O` — open the file picker.
+* Auto-detects the mod root from the `.helix` directory location.
+* Reads the Kristal mod id from `mod.json` `"id"` first; falls back to the directory name.
+* Supports `KRISTAL_ROOT` to point at the Kristal engine.
+* LuaLS support for Love2D, Kristal engine source, and local Kristal Lua docs.
+
+## How to Use
+
+### Copy into your mod
+
+```bash
+git clone git@github.com:Bli-AIk/kristal-helix-config.git /tmp/kristal-helix-config
+rsync -av --exclude .git /tmp/kristal-helix-config/ /path/to/your-mod/.helix/
+```
+
+### Or add as a git submodule
+
+```bash
+git -C /path/to/your-mod submodule add git@github.com:Bli-AIk/kristal-helix-config.git .helix
+git -C /path/to/your-mod submodule update --init --recursive
+```
+
+This keeps your mod's `.helix` tied to the upstream repo, so updating the config is just a submodule reference bump. If the mod already has a `.helix` directory, remove or un-track it first.
+
+## Configuration
+
+### Kristal engine path
+
+`run-kristal-terminal.sh` searches for the Kristal engine in this order:
+
+* `KRISTAL_ROOT`
+* `../Kristal` or `../../Kristal` relative to the mod
+* `~/Projects/LuaProjects/Kristal`
+* `~/Projects/Kristal`
+* `~/Kristal`
+
+If your engine lives elsewhere, set it in your shell config:
+
+```bash
+export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
+```
+
+### LuaLS library paths
+
+`languages.toml` attempts to load these LuaLS libraries:
+
+* `${3rd}/love2d/library`
+* `${env:KRISTAL_LUA_DOCS_LIBRARY}`
+* `${env:KRISTAL_LUA_DOCS}/library`
+* `~/Projects/LuaProjects/kristal-lua-docs/library`
+* `${env:KRISTAL_ROOT}/main.lua`
+* `${env:KRISTAL_ROOT}/src`
+* `~/Projects/LuaProjects/Kristal/main.lua`
+* `~/Projects/LuaProjects/Kristal/src`
+
+For more portable config:
+
+```bash
+export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
+export KRISTAL_LUA_DOCS="$HOME/Projects/LuaProjects/kristal-lua-docs"
+```
+
+Or point directly at the docs library:
+
+```bash
+export KRISTAL_LUA_DOCS_LIBRARY="$HOME/Projects/LuaProjects/kristal-lua-docs/library"
+```
+
+## Files
+
+| File | Purpose |
+| --- | --- |
+| `config.toml` | Project-level Helix keybindings. |
+| `languages.toml` | LuaLS, LuaJIT, Love2D/Kristal library and diagnostic settings. |
+| `run-kristal-terminal.sh` | Launches Kristal from the current mod automatically. |
+| `kristal-mod-globals.lua` | Mod global type hints for LuaLS. |
+
+## How to Verify
+
+From the repo root:
+
+```bash
+sh -n run-kristal-terminal.sh
+taplo check config.toml languages.toml
+hx --health lua
+```
+
+Inside a specific mod, check which mod id the script resolves:
+
+```bash
+TERM=dumb sh -x .helix/run-kristal-terminal.sh 2>&1 | rg 'mod_root=|mod_id=|engine_root=|title='
+```
+
+In `krisis_knightmare` you should see `mod_id=krisis_knightmare`; in `deltarune-ddd-ch1` you should see `mod_id=deltarune-ddd-ch1`.
+
+## Dependencies
+
+| Tool | Required For |
+| --- | --- |
+| [Helix](https://helix-editor.com) | Using `.helix/config.toml` and `.helix/languages.toml`. |
+| lua-language-server | Lua completions, go-to-definition, diagnostics. |
+| LÖVE | Running Kristal. |
+| Kristal | Launching and loading mods. |
+| kitty or xterm | `Space-l` / `Space-L` open a detached terminal window. |
+| taplo | Optional, for checking TOML files. |
+
+## Contributing
+
+This repo primarily serves personal Kristal mod development habits, so the config leans practical rather than aiming to be a universal framework.
+
+Good fits for contributions:
+
+* Fixing hard-coded paths that leak from one mod to another.
+* Improving LuaLS recognition of Kristal APIs.
+* Extending the launch script to support more terminal emulators.
+* Fleshing out Kristal mod global type hints.
+
+## License
+
+This project is licensed under either of
+
+* Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0))
+* MIT license ([LICENSE-MIT](LICENSE-MIT) or [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT))
+
+at your option.
