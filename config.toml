@@ -1,25 +1,3 @@
-# Duck 项目快捷键。
-# 本机 Helix 25.07 不支持通过 TOML 注册新的 :duck Ex 命令。
-# 手动发送任意文本时使用：
-# :sh /home/aik/Temps/duck-agent/duck-control.sh reply "xxxxxx"
-
-[keys.normal]
-# 仿照 Alt-y：打开 Duck 的非模态单行输入，按 Enter 发送给 Duck。
-"A-d" = [
-  ':insert-output root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && DUCK_AGENT_ROOT="$root" /home/aik/Temps/duck-agent/duck-compose.sh',
-  ':redraw',
-  ':set mouse false',
-  ':set mouse true',
-]
-
-# 手动发送当前工作区 watcher diff。
-"C-d" = ':sh root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && DUCK_AGENT_ROOT="$root" /home/aik/Temps/duck-agent/duck-control.sh diff'
-
-# 三个常用回复。
-"C-A-m" = ':sh root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && DUCK_AGENT_ROOT="$root" /home/aik/Temps/duck-agent/duck-control.sh reply "请更详细说明"'
-"C-A-n" = ':sh root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && DUCK_AGENT_ROOT="$root" /home/aik/Temps/duck-agent/duck-control.sh reply "请继续下一步"'
-"C-A-i" = ':sh root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)" && DUCK_AGENT_ROOT="$root" /home/aik/Temps/duck-agent/duck-control.sh reply "请给我一个提示"'
-
 [keys.normal.space]
 f = ":format"
 o = "file_picker"
