@@ -37,7 +37,7 @@ Kristal mods typically touch Lua scripts, the Love2D API, the Kristal engine, an
 * Auto-detects the mod root from the `.helix` directory location.
 * Reads the Kristal mod id from `mod.json` `"id"` first; falls back to the directory name.
 * Supports `KRISTAL_ROOT` to point at the Kristal engine.
-* LuaLS support for Love2D, Kristal engine source, and local Kristal Lua docs.
+* LuaLS support for Love2D and the Kristal engine source.
 
 ## How to Use
 
@@ -61,13 +61,9 @@ This keeps your mod's `.helix` tied to the upstream repo, so updating the config
 
 ### Kristal engine path
 
-`run-kristal-terminal.sh` searches for the Kristal engine in this order:
-
-* `KRISTAL_ROOT`
-* `../Kristal` or `../../Kristal` relative to the mod
-* `~/Projects/LuaProjects/Kristal`
-* `~/Projects/Kristal`
-* `~/Kristal`
+`run-kristal-terminal.sh` first walks up from the mod to find the nearest
+Kristal checkout, then falls back to `KRISTAL_ROOT`. A project-local checkout
+therefore wins over an inherited `KRISTAL_ROOT`.
 
 If your engine lives elsewhere, set it in your shell config:
 
@@ -77,28 +73,21 @@ export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
 
 ### LuaLS library paths
 
-`languages.toml` attempts to load these LuaLS libraries:
+This configuration targets Kristal `0.11.0-dev`
+(`f62afea63ccab02f468c24ac0d096bd8a2c9aa81`). Its checked-out engine source
+is the LuaLS API authority. `languages.toml` loads:
 
 * `${3rd}/love2d/library`
-* `${env:KRISTAL_LUA_DOCS_LIBRARY}`
-* `${env:KRISTAL_LUA_DOCS}/library`
-* `~/Projects/LuaProjects/kristal-lua-docs/library`
+* `.helix/kristal-mod-globals.lua`
 * `${env:KRISTAL_ROOT}/main.lua`
 * `${env:KRISTAL_ROOT}/src`
 * `~/Projects/LuaProjects/Kristal/main.lua`
 * `~/Projects/LuaProjects/Kristal/src`
 
-For more portable config:
+For a portable configuration:
 
 ```bash
 export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
-export KRISTAL_LUA_DOCS="$HOME/Projects/LuaProjects/kristal-lua-docs"
-```
-
-Or point directly at the docs library:
-
-```bash
-export KRISTAL_LUA_DOCS_LIBRARY="$HOME/Projects/LuaProjects/kristal-lua-docs/library"
 ```
 
 ## Files

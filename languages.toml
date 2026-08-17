@@ -1,5 +1,5 @@
 # Project-local LuaLS settings for this Kristal mod.
-# The mod remains its own workspace; Kristal is provided as external library docs.
+# The mod remains its own workspace; Kristal is provided directly from engine source.
 
 [language-server.lua-language-server]
 command = "lua-language-server"
@@ -18,9 +18,6 @@ libRequire = "require"
 [language-server.lua-language-server.config.Lua.workspace]
 library = [
   "${3rd}/love2d/library",
-  "${env:KRISTAL_LUA_DOCS_LIBRARY}",
-  "${env:KRISTAL_LUA_DOCS}/library",
-  "~/Projects/LuaProjects/kristal-lua-docs/library",
   ".helix/kristal-mod-globals.lua",
   "${env:KRISTAL_ROOT}/main.lua",
   "${env:KRISTAL_ROOT}/src",
@@ -36,7 +33,6 @@ autoRequire = false
 workspaceEvent = "OnChange"
 globals = ["love"]
 disable = [
-  "deprecated",
   "duplicate-set-field",
   "redundant-parameter",
   "undefined-doc-name",

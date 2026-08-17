@@ -37,7 +37,7 @@ Kristal mod 通常需要同时处理 Lua 脚本、Love2D API、Kristal 引擎代
 * 自动从当前 `.helix` 所在目录推导 mod 根目录。
 * 优先从 `mod.json` 的 `"id"` 读取 Kristal mod id，缺失时回退到目录名。
 * 支持用 `KRISTAL_ROOT` 指定 Kristal 引擎路径。
-* LuaLS 支持 Love2D、Kristal 引擎源码和本地 Kristal Lua docs。
+* LuaLS 支持 Love2D 和 Kristal 引擎源码。
 
 ## 使用方法
 
@@ -61,13 +61,9 @@ git -C /path/to/your-mod submodule update --init --recursive
 
 ### Kristal 引擎路径
 
-`run-kristal-terminal.sh` 会按下面顺序寻找 Kristal 引擎：
-
-* `KRISTAL_ROOT`
-* 当前 mod 附近的 `../Kristal` 或 `../../Kristal`
-* `~/Projects/LuaProjects/Kristal`
-* `~/Projects/Kristal`
-* `~/Kristal`
+`run-kristal-terminal.sh` 会先从当前 mod 向上寻找最近的 Kristal 检出目录，
+再回退到 `KRISTAL_ROOT`。因此项目附近的引擎优先于继承来的
+`KRISTAL_ROOT`。
 
 如果你的引擎不在这些位置，在 shell 配置里设置：
 
@@ -77,28 +73,21 @@ export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
 
 ### LuaLS library 路径
 
-`languages.toml` 会尝试加载这些 LuaLS library：
+这份配置对应 Kristal `0.11.0-dev`
+（`f62afea63ccab02f468c24ac0d096bd8a2c9aa81`）。LuaLS 的 API 权威来源是
+当前引擎检出源码。`languages.toml` 会加载：
 
 * `${3rd}/love2d/library`
-* `${env:KRISTAL_LUA_DOCS_LIBRARY}`
-* `${env:KRISTAL_LUA_DOCS}/library`
-* `~/Projects/LuaProjects/kristal-lua-docs/library`
+* `.helix/kristal-mod-globals.lua`
 * `${env:KRISTAL_ROOT}/main.lua`
 * `${env:KRISTAL_ROOT}/src`
 * `~/Projects/LuaProjects/Kristal/main.lua`
 * `~/Projects/LuaProjects/Kristal/src`
 
-想让配置更可移植的话，可以设置：
+要让配置更可移植，可以设置：
 
 ```bash
 export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
-export KRISTAL_LUA_DOCS="$HOME/Projects/LuaProjects/kristal-lua-docs"
-```
-
-或者直接指定 docs library：
-
-```bash
-export KRISTAL_LUA_DOCS_LIBRARY="$HOME/Projects/LuaProjects/kristal-lua-docs/library"
 ```
 
 ## 文件说明
