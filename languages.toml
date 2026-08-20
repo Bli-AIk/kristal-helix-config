@@ -28,6 +28,7 @@ library = [
   "~/Projects/LuaProjects/Kristal/main.lua",
   "~/Projects/LuaProjects/Kristal/src",
 ]
+ignoreSubmodules = false
 checkThirdParty = "Disable"
 
 [language-server.lua-language-server.config.Lua.completion]
