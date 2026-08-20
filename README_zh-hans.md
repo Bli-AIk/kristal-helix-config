@@ -7,8 +7,8 @@
 >
 > 当前状态：可用于本地 Kristal mod 开发；规模不大，偏个人使用。
 
-| English | 简体中文 |
-|---------|------|
+| English                | 简体中文 |
+| ---------------------- | -------- |
 | [English](./README.md) | 简体中文 |
 
 **kristal-helix-config** 是一份给 Kristal mod 项目使用的 [Helix](https://helix-editor.com) 编辑器本地配置。
@@ -23,21 +23,21 @@ Helix 会自动加载项目根目录下的 `.helix/config.toml` 和 `.helix/lang
 
 Kristal mod 通常需要同时处理 Lua 脚本、Love2D API、Kristal 引擎代码和 mod 自己的 `mod.json`。这份配置把这些日常会碰到的东西放在一起：
 
-* Helix 的项目级快捷键。
-* Lua Language Server 的 Kristal/Love2D 补全与诊断配置。
-* 一个从当前 mod 自动启动 Kristal 的终端脚本。
-* 少量 Kristal mod 全局类型提示。
+- Helix 的项目级快捷键。
+- Lua Language Server 的 Kristal/Love2D 补全与诊断配置。
+- 一个从当前 mod 自动启动 Kristal 的终端脚本。
+- 少量 Kristal mod 全局类型提示。
 
 ## 功能
 
-* `Space-l`：在新终端里运行当前 mod。
-* `Space-L`：同样运行当前 mod，但 Love 退出后保留终端窗口。
-* `Space-f`：格式化当前文件。
-* `Space-o` / `Space-O`：打开文件选择器。
-* 自动从当前 `.helix` 所在目录推导 mod 根目录。
-* 优先从 `mod.json` 的 `"id"` 读取 Kristal mod id，缺失时回退到目录名。
-* 支持用 `KRISTAL_ROOT` 指定 Kristal 引擎路径。
-* LuaLS 支持 Love2D 和 Kristal 引擎源码。
+- `Space-l`：在新终端里运行当前 mod。
+- `Space-L`：同样运行当前 mod，但 Love 退出后保留终端窗口。
+- `Space-f`：格式化当前文件。
+- `Space-o` / `Space-O`：打开文件选择器。
+- 自动从当前 `.helix` 所在目录推导 mod 根目录。
+- 优先从 `mod.json` 的 `"id"` 读取 Kristal mod id，缺失时回退到目录名。
+- 支持用 `KRISTAL_ROOT` 指定 Kristal 引擎路径。
+- LuaLS 支持 Love2D 和 Kristal 引擎源码。
 
 ## 使用方法
 
@@ -77,12 +77,12 @@ export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
 （`f62afea63ccab02f468c24ac0d096bd8a2c9aa81`）。LuaLS 的 API 权威来源是
 当前引擎检出源码。`languages.toml` 会加载：
 
-* `${3rd}/love2d/library`
-* `.helix/kristal-mod-globals.lua`
-* `${env:KRISTAL_ROOT}/main.lua`
-* `${env:KRISTAL_ROOT}/src`
-* `~/Projects/LuaProjects/Kristal/main.lua`
-* `~/Projects/LuaProjects/Kristal/src`
+- `${3rd}/love2d/library`
+- `.helix/kristal-mod-globals.lua`
+- `${env:KRISTAL_ROOT}/main.lua`
+- `${env:KRISTAL_ROOT}/src`
+- `~/Projects/LuaProjects/Kristal/main.lua`
+- `~/Projects/LuaProjects/Kristal/src`
 
 要让配置更可移植，可以设置：
 
@@ -92,12 +92,12 @@ export KRISTAL_ROOT="$HOME/Projects/LuaProjects/Kristal"
 
 ## 文件说明
 
-| File | Purpose |
-| --- | --- |
-| `config.toml` | Helix 项目级快捷键。 |
-| `languages.toml` | LuaLS、LuaJIT、Love2D/Kristal library 和诊断设置。 |
-| `run-kristal-terminal.sh` | 从当前 mod 自动启动 Kristal 的脚本。 |
-| `kristal-mod-globals.lua` | 给 LuaLS 用的 mod 全局类型提示。 |
+| File                      | Purpose                                            |
+| ------------------------- | -------------------------------------------------- |
+| `config.toml`             | Helix 项目级快捷键。                               |
+| `languages.toml`          | LuaLS、LuaJIT、Love2D/Kristal library 和诊断设置。 |
+| `run-kristal-terminal.sh` | 从当前 mod 自动启动 Kristal 的脚本。               |
+| `kristal-mod-globals.lua` | 给 LuaLS 用的 mod 全局类型提示。                   |
 
 ## 验证方法
 
@@ -119,14 +119,14 @@ TERM=dumb sh -x .helix/run-kristal-terminal.sh 2>&1 | rg 'mod_root=|mod_id=|engi
 
 ## 依赖
 
-| Tool | Required For |
-| --- | --- |
+| Tool                              | Required For                                           |
+| --------------------------------- | ------------------------------------------------------ |
 | [Helix](https://helix-editor.com) | 使用 `.helix/config.toml` 和 `.helix/languages.toml`。 |
-| lua-language-server | Lua 补全、跳转、诊断。 |
-| LÖVE | 运行 Kristal。 |
-| Kristal | 启动并加载 mod。 |
-| kitty or xterm | `Space-l` / `Space-L` 打开独立终端窗口。 |
-| taplo | 可选，用于检查 TOML。 |
+| lua-language-server               | Lua 补全、跳转、诊断。                                 |
+| LÖVE                              | 运行 Kristal。                                         |
+| Kristal                           | 启动并加载 mod。                                       |
+| kitty or xterm                    | `Space-l` / `Space-L` 打开独立终端窗口。               |
+| taplo                             | 可选，用于检查 TOML。                                  |
 
 ## 参与贡献
 
@@ -134,16 +134,16 @@ TERM=dumb sh -x .helix/run-kristal-terminal.sh 2>&1 | rg 'mod_root=|mod_id=|engi
 
 适合提交的改动：
 
-* 修掉复制到新 mod 后仍然依赖旧路径的问题。
-* 改善 LuaLS 对 Kristal API 的识别。
-* 让运行脚本支持更多常见终端。
-* 补充更准确的 Kristal mod 全局类型提示。
+- 修掉复制到新 mod 后仍然依赖旧路径的问题。
+- 改善 LuaLS 对 Kristal API 的识别。
+- 让运行脚本支持更多常见终端。
+- 补充更准确的 Kristal mod 全局类型提示。
 
 ## 许可证
 
 本项目的许可证可从以下二者中任选其一：
 
-* Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) 或 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0))
-* MIT license ([LICENSE-MIT](LICENSE-MIT) 或 [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT))
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) 或 [http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0))
+- MIT license ([LICENSE-MIT](LICENSE-MIT) 或 [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT))
 
 随你选择。
